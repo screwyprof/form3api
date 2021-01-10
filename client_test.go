@@ -4,14 +4,10 @@ import (
 	"testing"
 
 	"github.com/screwyprof/form3api"
+	"github.com/screwyprof/form3api/assert"
 )
 
-func TestClient(t *testing.T) {
-	t.Run("Can create new client", func(t *testing.T) {
-		t.Parallel()
-		c := form3api.NewClient()
-		if c == nil {
-			t.Fatal("Cannot create client")
-		}
-	})
+func TestNewClient(t *testing.T) {
+	c := form3api.NewClient(nil)
+	assert.NotNil(t, c)
 }

@@ -1,0 +1,15 @@
+ignore:
+  - "**/*.^go"
+  - "assert"
+coverage:
+  precision: 2
+  round: nearest
+
+  status:
+    patch: off
+    project:
+      default:
+        target: 80%
+
+comment:
+  behavior: default
