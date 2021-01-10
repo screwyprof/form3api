@@ -27,6 +27,10 @@ test-e2e: ## run e2e tests
 	@echo "$(OK_COLOR)--> Running E2E tests$(NO_COLOR)"
 	go test --tags "e2e" --race --count=1 ./tests/e2e/...
 
+test-coverage: ## run all tests with coverage
+	@echo "$(OK_COLOR)--> Generating code coverage$(NO_COLOR)"
+	tools/coverage.sh
+
 fmt: ## format go files
 	@echo "$(OK_COLOR)--> Formatting go files$(NO_COLOR)"
 	go fmt ./...
@@ -34,6 +38,7 @@ fmt: ## format go files
 clean: ## remove tools
 	@echo "$(OK_COLOR)--> Clean up$(NO_COLOR)"
 	rm -rf $(PWD)/tools/bin
+	rm coverage.txt c.out
 
 help: ## show this help screen
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  $(MAKE_COLOR) %s\n", $$1, $$2 } /^##@/ { printf "\n$(MAKE_COLOR)\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
@@ -41,4 +46,4 @@ help: ## show this help screen
 # To avoid unintended conflicts with file names, always add to .PHONY
 # unless there is a reason not to.
 # https://www.gnu.org/software/make/manual/html_node/Phony-Targets.html
-.PHONY: all deps tools lint test test-unit test-e2e fmt clean help
+.PHONY: all deps tools lint test test-unit test-e2e test-ci fmt clean help
