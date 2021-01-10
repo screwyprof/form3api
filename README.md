@@ -1,5 +1,7 @@
 # form3api
 ![form3api-client](https://github.com/screwyprof/form3api/workflows/form3api-client/badge.svg)
+[![Codecov](https://codecov.io/gh/screwyprof/payment/branch/master/graph/badge.svg)](https://codecov.io/gh/screwyprof/form3api)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Form3 Take Home Exercise
 
