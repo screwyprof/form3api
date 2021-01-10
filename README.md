@@ -1,4 +1,6 @@
 # form3api
+![form3api-client](https://github.com/screwyprof/form3api/workflows/form3api-client/badge.svg)
+
 Form3 Take Home Exercise
 
 ## Introduction
