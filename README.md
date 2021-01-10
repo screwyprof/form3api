@@ -35,3 +35,20 @@ the same - server and client are tested together.
 Providing that [the contract](https://developer.form3.tech/#9642bfad-d524-49c2-857c-f6becb69bd90) is already defined, 
 and the server side (the fake account service) is already implemented I'm ready to peruse the docs and run a few queries
 to make sure the provided fake service works as expected. After that, I will be able to start working on the client.
+
+## Local environment and tools
+I use GoLang 1.14 with go modules. [golang-ci](https://github.com/golangci/golangci-lint) helps me run linters. 
+Postman can come in handy to run queries to the API service. In order to make my life easier I've created a Makefile.
+
+### Building the project
+Simple run `make` or `make all` to install all the required dependencies and tools, to run linters and all the tests.
+Use `make help` to get information about additional targets.
+
+### Running tests
+To run unit and E2E tests run `make test`. To run unit tests only `make test-unit`. To run E2E tests `make test-e2e`
+
+### Running linters
+To run local linters use `make lint`
+
+### Formatting code
+Use `make fmt` to run go fmt
