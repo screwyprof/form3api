@@ -62,6 +62,7 @@ One of the first things I usually do when I build a project from scratch is set 
 The tests must be run on every commit. Apart from that I would love to run linters as well. If it was an application
 I would also run the actual building process, but given that we have a library, this stage can be omitted. For the sake
 of this demo, I decided to use Github Actions to help me run the builds. Makefile was updated to include CI targets.
+Apart from that test coverage support added via codecov.io
 
 Also, I've decided to commit the whole vendor folder to make CI jobs deterministic. Normally this decision should be
 based on a company-wide convention document, where it is decided whether we need stable and repeatable builds in the CI
