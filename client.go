@@ -7,23 +7,7 @@ import (
 	"net/http"
 )
 
-type Client struct {
-	baseURL string
-	client  *http.Client
-}
-
-func NewClient(httpClient *http.Client, baseURL string) *Client {
-	if httpClient == nil {
-		httpClient = &http.Client{}
-	}
-
-	return &Client{
-		client:  httpClient,
-		baseURL: baseURL,
-	}
-}
-
-func (c *Client) CreateAccount(ctx context.Context, r CreateAccount) (*Account, error) {
+func (c *Client) postJSONReq(ctx context.Context, endpoint string, r interface{}) (*http.Request, error) {
 	buf := &bytes.Buffer{}
 	enc := json.NewEncoder(buf)
 	err := enc.Encode(r)
@@ -31,23 +15,15 @@ func (c *Client) CreateAccount(ctx context.Context, r CreateAccount) (*Account, 
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", c.baseURL+"/organisation/accounts", buf)
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, endpoint, buf)
 	if err != nil {
 		return nil, err
 	}
-	req = req.WithContext(ctx)
 	req.Header.Set("Content-Type", "application/json")
 
-	resp, err := c.client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
+	return req, nil
+}
 
-	var acc *Account
-	if err := json.NewDecoder(resp.Body).Decode(&acc); err != nil {
-		return nil, err
-	}
-
-	return acc, nil
+func (c *Client) bindJSONResp(resp *http.Response, obj interface{}) error {
+	return json.NewDecoder(resp.Body).Decode(&obj)
 }

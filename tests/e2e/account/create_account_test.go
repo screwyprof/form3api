@@ -9,7 +9,6 @@ import (
 	"github.com/brianvoe/gofakeit/v6"
 
 	"github.com/screwyprof/form3api"
-	"github.com/screwyprof/form3api/assert"
 )
 
 // TODO: make configurable via ENV variables
@@ -70,7 +69,7 @@ func TestCreateAccount(t *testing.T) {
 	acc, err := c.CreateAccount(context.Background(), r)
 
 	// assert
-	assert.Ok(t, err)
+	form3api.Ok(t, err)
 	assertAccount(t, want, acc)
 }
 
@@ -80,21 +79,24 @@ func assertAccount(tb testing.TB, want, got *form3api.Account) {
 	assertIBAN(tb, got.AccountData.Attributes.IBAN)
 	assertCustomer(tb, got.AccountData.Attributes.CustomerID)
 
+	// there are a few options to deal with non-deterministic responses
+	// the simplest - is to ignore them for now.
+	// Ideally the response should be checked against a pre-defined schema.
 	got.AccountData.CreatedOn = nil
 	got.AccountData.ModifiedOn = nil
 	got.AccountData.Attributes.CustomerID = ""
 	got.AccountData.Attributes.IBAN = ""
-	assert.Equals(tb, want, got)
+	form3api.Equals(tb, want, got)
 }
 
 // TODO: should check against the pattern
 func assertIBAN(tb testing.TB, IBAN string) {
 	tb.Helper()
-	assert.True(tb, IBAN != "")
+	form3api.True(tb, IBAN != "")
 }
 
 // TODO: should check against the pattern
 func assertCustomer(tb testing.TB, customer string) {
 	tb.Helper()
-	assert.True(tb, customer != "")
+	form3api.True(tb, customer != "")
 }
