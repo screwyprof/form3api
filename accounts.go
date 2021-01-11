@@ -1,9 +1,14 @@
-package req
+package form3api
 
 import "time"
 
 type CreateAccount struct {
 	AccountData `json:"data"`
+}
+
+type Account struct {
+	AccountData AccountData `json:"data"`
+	Links       Links       `json:"links"`
 }
 
 type AccountData struct {
@@ -14,6 +19,10 @@ type AccountData struct {
 	CreatedOn      *time.Time         `json:"created_on"`
 	ModifiedOn     *time.Time         `json:"modified_on"`
 	Attributes     *AccountAttributes `json:"attributes"`
+}
+
+type Links struct {
+	Self string `json:"self"`
 }
 
 type AccountAttributes struct {
@@ -36,5 +45,5 @@ type ConfirmationOfPayee struct {
 	AccountMatchingOptOut   bool     `json:"account_matching_opt_out"`
 	SecondaryIdentification string   `json:"secondary_identification"`
 	Switched                bool     `json:"switched"`
-	Status                  string   `json:"status"` // TODO: convert to an enum type holding "pending", "confirmed", "failed"
+	Status                  string   `json:"status"` // TODO: convert to an enum type: "pending", "confirmed", "failed"
 }
