@@ -9,9 +9,10 @@ import (
 // Binds response body to res on success, returns an APIError on failure.
 //
 // TODO: Refactor to use a request builder, something like this:
-// 	 NewTransport(c.client).
+// 	 NewRequest().
+//		 WithClient(client). // built-in http client by default
 //		 WithBaseURL("/some_url").
-//		 WithMethod(http.MethodPost).
+//		 WithMethod(http.MethodPost). // http.MethodGet by default
 //		 Exec(ctx, params, &res)
 //
 // TODO: Consider moving to a separate package.
