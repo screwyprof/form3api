@@ -34,19 +34,8 @@ func NewClient(httpClient HTTPClient, baseURL string) *Client {
 //
 // Form 3 API docs: https://api-docs.form3.tech/api.html?shell#organisation-accounts-create
 func (c *Client) CreateAccount(ctx context.Context, r CreateAccount) (*Account, error) {
-	req, err := c.postJSONReq(ctx, c.baseURL+"/organisation/accounts", r)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := c.client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
 	var acc *Account
-	if err := c.bindJSONResp(resp, &acc); err != nil {
+	if err := c.Exec(ctx, http.MethodPost, c.baseURL+"/organisation/accounts", r, &acc); err != nil {
 		return nil, err
 	}
 

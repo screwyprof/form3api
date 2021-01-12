@@ -19,7 +19,7 @@ func TestNewClient(t *testing.T) {
 	form3api.NotNil(t, c)
 }
 
-func TestClientCreateAccount(t *testing.T) {
+func TestClientCreateAccount_ValidRequestGiven_AccountCreated(t *testing.T) {
 	// arrange
 	ID := gofakeit.UUID()
 	organisationID := gofakeit.UUID()

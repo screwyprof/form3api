@@ -1,6 +1,6 @@
 ignore:
   - "**/*.^go"
-  - "assert"
+  - "asserts.go"
 coverage:
   precision: 2
   round: nearest
