@@ -5,11 +5,6 @@ import (
 	"net/http"
 )
 
-// HTTPClient an interface to abstract the http client. Used for testing purposes.
-type HTTPClient interface {
-	Do(req *http.Request) (*http.Response, error)
-}
-
 // Client communicates with Fake Form 3 Account API
 type Client struct {
 	baseURL string
@@ -35,9 +30,13 @@ func NewClient(httpClient HTTPClient, baseURL string) *Client {
 // Form 3 API docs: https://api-docs.form3.tech/api.html?shell#organisation-accounts-create
 func (c *Client) CreateAccount(ctx context.Context, r CreateAccount) (*Account, error) {
 	var acc *Account
-	if err := c.Exec(ctx, http.MethodPost, c.baseURL+"/organisation/accounts", r, &acc); err != nil {
+	err := NewRequest().
+		WithClient(c.client).
+		WithBaseURL(c.baseURL+"/organisation/accounts").
+		WithMethod(http.MethodPost).
+		Exec(ctx, r, &acc)
+	if err != nil {
 		return nil, err
 	}
-
 	return acc, nil
 }

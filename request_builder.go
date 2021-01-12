@@ -5,18 +5,44 @@ import (
 	"net/http"
 )
 
-// Exec builds and sends the request to url with the given method and params.
-// Binds response body to res on success, returns an APIError on failure.
-//
-// TODO: Refactor to use a request builder, something like this:
-// 	 NewRequest().
-//		 WithClient(client). // built-in http client by default
-//		 WithBaseURL("/some_url").
-//		 WithMethod(http.MethodPost). // http.MethodGet by default
-//		 Exec(ctx, params, &res)
-//
-// TODO: Consider moving to a separate package.
-func (c *Client) Exec(ctx context.Context, method, url string, params interface{}, res interface{}) error {
+// HTTPClient an interface to abstract the http client. Used for testing purposes.
+type HTTPClient interface {
+	Do(req *http.Request) (*http.Response, error)
+}
+
+// RequestBuilder builds and sends the API requests.
+type RequestBuilder struct {
+	client        HTTPClient
+	baseURL       string
+	requestMethod string
+}
+
+// NewRequest creates new instance of RequestBuilder.
+func NewRequest() *RequestBuilder {
+	return &RequestBuilder{client: &http.Client{}}
+}
+
+// WithClient sets an http client
+func (rb *RequestBuilder) WithClient(client HTTPClient) *RequestBuilder {
+	rb.client = client
+	return rb
+}
+
+// WithBaseURL sets endpoint url.
+func (rb *RequestBuilder) WithBaseURL(baseURL string) *RequestBuilder {
+	rb.baseURL = baseURL
+	return rb
+}
+
+// WithMethod sets request method.
+func (rb *RequestBuilder) WithMethod(method string) *RequestBuilder {
+	rb.requestMethod = method
+	return rb
+}
+
+// Exec builds and sends the request to endpoint url with the given method and params.
+// Binds response body to res on success, returns an error on failure.
+func (rb *RequestBuilder) Exec(ctx context.Context, params interface{}, res interface{}) error {
 	s := &jsonSerializer{}
 
 	// prepare request
@@ -25,14 +51,14 @@ func (c *Client) Exec(ctx context.Context, method, url string, params interface{
 		return err
 	}
 
-	req, err := http.NewRequestWithContext(ctx, method, url, body)
+	req, err := http.NewRequestWithContext(ctx, rb.requestMethod, rb.baseURL, body)
 	if err != nil {
 		return err
 	}
 	req.Header.Set("Content-Type", s.ContentType())
 
 	// exec request
-	resp, err := c.client.Do(req)
+	resp, err := rb.client.Do(req)
 	if err != nil {
 		return err
 	}

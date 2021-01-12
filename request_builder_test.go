@@ -11,16 +11,16 @@ import (
 	"github.com/screwyprof/form3api"
 )
 
-func TestClientExec(t *testing.T) {
+func TestRequestBuilder(t *testing.T) {
 	t.Run("invalid request params given, error returned", func(t *testing.T) {
 		t.Parallel()
 
 		// arrange
 		params := make(chan struct{})
+		rb := form3api.NewRequest()
 
 		// act
-		c := form3api.NewClient(nil, "")
-		err := c.Exec(context.Background(), http.MethodPost, "/some_url", params, nil)
+		err := rb.Exec(context.Background(), params, nil)
 
 		// assert
 		form3api.NotNil(t, err)
@@ -30,10 +30,11 @@ func TestClientExec(t *testing.T) {
 		t.Parallel()
 
 		// arrange
-		c := form3api.NewClient(nil, "")
+		rb := form3api.NewRequest().
+			WithBaseURL("unknown_scheme://_invalid__url")
 
 		// act
-		err := c.Exec(context.Background(), "", "unknown_scheme://_invalid__url", nil, nil)
+		err := rb.Exec(context.Background(), nil, nil)
 
 		// assert
 		form3api.NotNil(t, err)
@@ -44,10 +45,12 @@ func TestClientExec(t *testing.T) {
 
 		// arrange
 		client := &httpClientMock{ExpectedError: errors.New("some error")}
-		c := form3api.NewClient(client, "")
+		rb := form3api.NewRequest().
+			WithClient(client).
+			WithBaseURL("/some_url")
 
 		// act
-		err := c.Exec(context.Background(), "", "/some_url", nil, nil)
+		err := rb.Exec(context.Background(), nil, nil)
 
 		// assert
 		form3api.NotNil(t, err)
@@ -65,10 +68,12 @@ func TestClientExec(t *testing.T) {
 			return resp, nil
 		}
 
-		c := form3api.NewClient(client, "")
+		rb := form3api.NewRequest().
+			WithClient(client).
+			WithBaseURL("/some_url")
 
 		// act
-		err := c.Exec(context.Background(), "", "/some_url", nil, nil)
+		err := rb.Exec(context.Background(), nil, nil)
 
 		// assert
 		form3api.NotNil(t, err)
@@ -87,11 +92,14 @@ func TestClientExec(t *testing.T) {
 			ExpectedReqBody:   req,
 			ResponseBody:      want,
 		}
-		c := form3api.NewClient(client, "")
+		rb := form3api.NewRequest().
+			WithClient(client).
+			WithBaseURL("/some_url").
+			WithMethod(http.MethodPost)
 
 		// act
 		var got *testResponse
-		err := c.Exec(context.Background(), http.MethodPost, "/some_url", req, &got)
+		err := rb.Exec(context.Background(), req, &got)
 
 		// assert
 		form3api.Ok(t, err)
