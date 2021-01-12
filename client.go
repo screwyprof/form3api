@@ -8,7 +8,12 @@ import (
 // Exec builds and sends the request to url with the given method and params.
 // Binds response body to res on success, returns an APIError on failure.
 //
-// TODO: Refactor to use a request builder to minimize the number of arguments.
+// TODO: Refactor to use a request builder, something like this:
+// 	 NewTransport(c.client).
+//		 WithBaseURL("/some_url").
+//		 WithMethod(http.MethodPost).
+//		 Exec(ctx, params, &res)
+//
 // TODO: Consider moving to a separate package.
 func (c *Client) Exec(ctx context.Context, method, url string, params interface{}, res interface{}) error {
 	s := &jsonSerializer{}
