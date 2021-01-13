@@ -1,0 +1,9 @@
+ignore:
+  - "**/*.^go"
+  - "asserts.go"
+coverage:
+  precision: 2
+  round: nearest
+
+comment:
+  behavior: default
