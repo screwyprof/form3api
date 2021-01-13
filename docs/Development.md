@@ -63,3 +63,8 @@ capture the expected input and output for Create Account.
 
 Basically I'm following the [A-TDD cycle](https://www.agilealliance.org/glossary/atdd/). Write an acceptance test, then 
 implement the feature though the TDD cycles until the test passes.
+
+**NB!** As I mentioned it earlier, a real API client should deal with such things as load-balancing, retries, timeouts, 
+rate-limits, security concerns, etc... For the simplicity reasons I will neglect these things for now. Another thing to 
+keep in mind is validating the response data. Validation is another huge topic on its own which I won't touch. There are 
+very many ways to do it. One of the possible options would be to check the response against a pre-defined JSON schema.
