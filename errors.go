@@ -2,6 +2,7 @@ package form3api
 
 import "fmt"
 
+// APIError represent response API error.
 type APIError struct {
 	StatusCode int
 	Code       string `json:"code"`
