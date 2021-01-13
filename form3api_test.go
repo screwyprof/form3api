@@ -107,6 +107,9 @@ func assertRequestMethod(tb testing.TB, want string, r *http.Request) {
 
 func assertRequestBody(tb testing.TB, want interface{}, r *http.Request) {
 	tb.Helper()
+	if want == nil {
+		return
+	}
 	wantType := reflect.TypeOf(want)
 
 	got := reflect.New(wantType).Interface()

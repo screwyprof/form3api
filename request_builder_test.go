@@ -56,6 +56,56 @@ func TestRequestBuilder(t *testing.T) {
 		form3api.NotNil(t, err)
 	})
 
+	t.Run("known API error occurred, error returned", func(t *testing.T) {
+		t.Parallel()
+
+		// arrange
+		want := &form3api.APIError{
+			StatusCode: http.StatusInternalServerError,
+			Code:       "SOME_ERROR",
+			Msg:        "some error",
+		}
+
+		client := &httpClientMock{
+			TB:                t,
+			ExpectedReqMethod: http.MethodGet,
+			StatusCode:        want.StatusCode,
+			ResponseBody:      want,
+		}
+		rb := form3api.NewRequest().
+			WithClient(client).
+			WithBaseURL("/some_url")
+
+		// act
+		err := rb.Exec(context.Background(), nil, nil)
+
+		// assert
+		form3api.NotNil(t, err)
+	})
+
+	t.Run("unknown API error occurred, error returned", func(t *testing.T) {
+		t.Parallel()
+
+		// arrange
+		client := &httpClientMock{}
+		client.HandlerFunc = func(req *http.Request) (*http.Response, error) {
+			resp := &http.Response{
+				StatusCode: http.StatusInternalServerError,
+				Body:       ioutil.NopCloser(bytes.NewReader([]byte("invalid json body"))),
+			}
+			return resp, nil
+		}
+		rb := form3api.NewRequest().
+			WithClient(client).
+			WithBaseURL("/some_url")
+
+		// act
+		err := rb.Exec(context.Background(), nil, nil)
+
+		// assert
+		form3api.NotNil(t, err)
+	})
+
 	t.Run("body deserialization error occurred, error returned", func(t *testing.T) {
 		t.Parallel()
 
@@ -63,7 +113,8 @@ func TestRequestBuilder(t *testing.T) {
 		client := &httpClientMock{}
 		client.HandlerFunc = func(req *http.Request) (*http.Response, error) {
 			resp := &http.Response{
-				Body: ioutil.NopCloser(bytes.NewReader([]byte("invalid json body"))),
+				StatusCode: http.StatusOK,
+				Body:       ioutil.NopCloser(bytes.NewReader([]byte("invalid json body"))),
 			}
 			return resp, nil
 		}
@@ -91,6 +142,7 @@ func TestRequestBuilder(t *testing.T) {
 			ExpectedReqMethod: http.MethodPost,
 			ExpectedReqBody:   req,
 			ResponseBody:      want,
+			StatusCode:        http.StatusCreated,
 		}
 		rb := form3api.NewRequest().
 			WithClient(client).
