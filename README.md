@@ -11,7 +11,8 @@ This is a possible solution to [Form3 Take Home Exercise](https://github.com/for
 [Maksim Shcherbo](https://www.linkedin.com/in/maxim-shcherbo-3204582b/) aka [*screwyprof*](https://github.com/screwyprof).
 
 ## Development Log
-I've decided to [document](docs/Development.md) the steps I've taken to implement the task.
+I've decided to [document](docs/Development.md) the steps I've taken to implement the task. Each step is represented by
+a separate [Github Issue](https://github.com/screwyprof/form3api/issues?q=is%3Aissue+is%3Aclosed).
 
 ## Architecture Decision Records
 I'm going to document some of my high-level decisions in the following [ADR.md](docs/ADR.md) document.
