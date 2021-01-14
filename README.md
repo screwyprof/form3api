@@ -26,6 +26,9 @@ acc, err := c.FetchAccount(context.Background(), form3api.FetchAccount{AccountID
 ```
 Take a loot at [Client Demo](example/client_demo.go) for more details.
 
+## Running integration tests
+To run tests in docker use `make docker-test`, or its equivalent `docker-compose up --build --abort-on-container-exit`
+
 ## Development
 
 ### Development Log
@@ -47,4 +50,3 @@ Install the linters by running `make tools`. This step is required once only. To
 
 ### Formatting code
 Use `make fmt` to run go fmt
-
