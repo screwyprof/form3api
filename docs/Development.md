@@ -71,3 +71,7 @@ very many ways to do it. One of the possible options would be to check the respo
 
 ## Fetch Account
 [Github Issue](https://github.com/screwyprof/form3api/issues/10)
+
+This step is pretty straightforward. I'm following the same [A-TDD cycle](https://www.agilealliance.org/glossary/atdd/)
+to drive the development. I updated Readme to include usage section. I also added an example application to demonstrate
+some basic client features.
