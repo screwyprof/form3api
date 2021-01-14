@@ -3,6 +3,7 @@ package form3api
 import (
 	"context"
 	"net/http"
+	"strconv"
 )
 
 // Client communicates with Fake Form 3 Account API
@@ -54,4 +55,16 @@ func (c *Client) FetchAccount(ctx context.Context, r FetchAccount) (*Account, er
 		return nil, err
 	}
 	return acc, nil
+}
+
+// DeleteAccount deletes an account.
+//
+// Form 3 API docs: https://api-docs.form3.tech/api.html?shell#organisation-accounts-delete
+func (c *Client) DeleteAccount(ctx context.Context, r DeleteAccount) error {
+	err := NewRequest().
+		WithClient(c.client).
+		WithMethod(http.MethodDelete).
+		WithBaseURL(c.baseURL+"/organisation/accounts/"+r.AccountID+"?version="+strconv.Itoa(int(r.Version))).
+		Exec(ctx, nil, nil)
+	return err
 }

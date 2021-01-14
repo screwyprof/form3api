@@ -53,8 +53,11 @@ func assertCustomer(tb testing.TB, customer string) {
 	form3api.True(tb, customer != "")
 }
 
-func createTestAccount(r form3api.CreateAccount) (*form3api.Account, error) {
-	return client.CreateAccount(context.Background(), r)
+func createTestAccount(tb testing.TB, r form3api.CreateAccount) *form3api.Account {
+	tb.Helper()
+	acc, err := client.CreateAccount(context.Background(), r)
+	form3api.Ok(tb, err)
+	return acc
 }
 
 func generateCreateAccountRequest() form3api.CreateAccount {
@@ -79,4 +82,10 @@ func generateCreateAccountRequest() form3api.CreateAccount {
 		},
 	}
 	return r
+}
+
+func deleteTestAccount(tb testing.TB, ID string) {
+	tb.Helper()
+	err := client.DeleteAccount(context.Background(), form3api.DeleteAccount{AccountID: ID})
+	form3api.Ok(tb, err)
 }

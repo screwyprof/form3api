@@ -61,15 +61,15 @@ func TestRequestBuilder(t *testing.T) {
 
 		// arrange
 		want := &form3api.APIError{
-			StatusCode: http.StatusInternalServerError,
-			Code:       "SOME_ERROR",
-			Msg:        "some error",
+			Response: &http.Response{StatusCode: http.StatusInternalServerError},
+			Code:     "SOME_ERROR",
+			Msg:      "some error",
 		}
 
 		client := &httpClientMock{
 			TB:                t,
 			ExpectedReqMethod: http.MethodGet,
-			StatusCode:        want.StatusCode,
+			StatusCode:        http.StatusInternalServerError,
 			ResponseBody:      want,
 		}
 		rb := form3api.NewRequest().

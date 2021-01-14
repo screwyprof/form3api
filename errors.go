@@ -1,14 +1,19 @@
 package form3api
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
 
 // APIError represent response API error.
 type APIError struct {
-	StatusCode int
-	Code       string `json:"code"`
-	Msg        string `json:"message"`
+	Response *http.Response `json:"-"`
+	Code     string         `json:"code"`
+	Msg      string         `json:"error_message"`
 }
 
-func (e *APIError) Error() string {
-	return fmt.Sprintf("API Call Error: status code: %d, [%s] - %s", e.StatusCode, e.Code, e.Msg)
+func (r *APIError) Error() string {
+	return fmt.Sprintf("API Call Error: %s %s: %d %s %s",
+		r.Response.Request.Method, r.Response.Request.URL,
+		r.Response.StatusCode, r.Msg, r.Code)
 }

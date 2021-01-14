@@ -67,4 +67,9 @@ func TestCreateAccount(t *testing.T) {
 	// assert
 	form3api.Ok(t, err)
 	assertAccountCreated(t, want, acc)
+
+	// annihilate
+	t.Cleanup(func() {
+		deleteTestAccount(t, ID)
+	})
 }

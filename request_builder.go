@@ -1,7 +1,9 @@
 package form3api
 
 import (
+	"bytes"
 	"context"
+	"io/ioutil"
 	"net/http"
 )
 
@@ -77,24 +79,35 @@ func (rb *RequestBuilder) buildRequest(ctx context.Context, params interface{}) 
 }
 
 func (rb *RequestBuilder) bindResponse(resp *http.Response, res interface{}) error {
+	defer resp.Body.Close()
 	if err := rb.checkResponse(resp); err != nil {
 		return err
 	}
 
-	if err := rb.serializer.Deserialize(resp.Body, res); err != nil {
-		return err
+	// delete response has no body
+	if resp.StatusCode == http.StatusNoContent {
+		return nil
 	}
 
-	return resp.Body.Close()
+	return rb.serializer.Deserialize(resp.Body, res)
 }
 
 func (rb *RequestBuilder) checkResponse(resp *http.Response) error {
 	if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusBadRequest {
-		var apiErr *APIError
-		if err := rb.serializer.Deserialize(resp.Body, &apiErr); err != nil {
-			return err
+		// read response body
+		body, err := ioutil.ReadAll(resp.Body)
+
+		// repopulate response body
+		// it maybe useful for non-structured API error responses to facilitate debugging
+		// it can also be used later to log the response
+		resp.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+		apiErr := &APIError{Response: resp}
+
+		// try to parse known errors
+		if body != nil && err == nil {
+			_ = rb.serializer.Deserialize(bytes.NewBuffer(body), &apiErr)
 		}
-		apiErr.StatusCode = resp.StatusCode
+
 		return apiErr
 	}
 	return nil
