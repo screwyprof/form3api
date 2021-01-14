@@ -52,7 +52,7 @@ I've decided to commit the whole vendor folder to make CI jobs deterministic. No
 a company-wide convention document, where it is decided whether we need stable and repeatable builds in the CI or would 
 give it up to the go mod to deals with the deps to make the repo size smaller.
 
-## Start With the First Feature
+## Start With the First Feature: Create Account
 [Github Issue](https://github.com/screwyprof/form3api/issues/8)
 
 Now that I have a working CI pipeline I can start the actual development. 
@@ -68,3 +68,10 @@ implement the feature though the TDD cycles until the test passes.
 rate-limits, security concerns, etc... For the simplicity reasons I will neglect these things for now. Another thing to 
 keep in mind is validating the response data. Validation is another huge topic on its own which I won't touch. There are 
 very many ways to do it. One of the possible options would be to check the response against a pre-defined JSON schema.
+
+## Fetch Account
+[Github Issue](https://github.com/screwyprof/form3api/issues/10)
+
+This step is pretty straightforward. I'm following the same [A-TDD cycle](https://www.agilealliance.org/glossary/atdd/)
+to drive the development. I updated Readme to include usage section. I also added an example application to demonstrate
+some basic client features.

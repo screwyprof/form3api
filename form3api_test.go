@@ -100,6 +100,69 @@ func TestClientCreateAccount(t *testing.T) {
 	})
 }
 
+func TestClientFetchAccount(t *testing.T) {
+	t.Run("valid request given, account created", func(t *testing.T) {
+		// arrange
+		ID := gofakeit.UUID()
+		organisationID := gofakeit.UUID()
+		accountNumber := gofakeit.Numerify("#########")
+		bankID := gofakeit.Numerify("######")
+
+		want := &form3api.Account{
+			AccountData: form3api.AccountData{
+				ID:             ID,
+				OrganisationID: organisationID,
+				Type:           "accounts",
+				Attributes: &form3api.AccountAttributes{
+					AccountNumber: accountNumber,
+					BankID:        bankID,
+					BankIDCode:    "GBDSC",
+					BIC:           "NWBKGB42",
+					Country:       "GB",
+					Currency:      "GBP",
+					ConfirmationOfPayee: &form3api.ConfirmationOfPayee{
+						AccountClassification: "Personal",
+					},
+				},
+			},
+			Links: form3api.Links{
+				Self: "/v1/organisation/accounts/" + ID,
+			},
+		}
+
+		r := form3api.FetchAccount{
+			AccountID: ID,
+		}
+
+		client := &httpClientMock{
+			TB:                t,
+			ExpectedReqMethod: http.MethodGet,
+			StatusCode:        http.StatusOK,
+			ResponseBody:      want,
+		}
+
+		// act
+		c := form3api.NewClient(client, "")
+		resp, err := c.FetchAccount(context.Background(), r)
+
+		// assert
+		form3api.Ok(t, err)
+		form3api.Equals(t, want, resp)
+	})
+
+	t.Run("an error occurred, error returned", func(t *testing.T) {
+		// arrange
+		client := &httpClientMock{ExpectedError: errors.New("some error")}
+		c := form3api.NewClient(client, "")
+
+		// act
+		_, err := c.FetchAccount(context.Background(), form3api.FetchAccount{})
+
+		// assert
+		form3api.NotNil(t, err)
+	})
+}
+
 func assertRequestMethod(tb testing.TB, want string, r *http.Request) {
 	tb.Helper()
 	form3api.Equals(tb, want, r.Method)

@@ -40,3 +40,18 @@ func (c *Client) CreateAccount(ctx context.Context, r CreateAccount) (*Account, 
 	}
 	return acc, nil
 }
+
+// CreateAccount creates an account.
+//
+// Form 3 API docs: https://api-docs.form3.tech/api.html?shell#organisation-accounts-fetch
+func (c *Client) FetchAccount(ctx context.Context, r FetchAccount) (*Account, error) {
+	var acc *Account
+	err := NewRequest().
+		WithClient(c.client).
+		WithBaseURL(c.baseURL+"/organisation/accounts/"+r.AccountID).
+		Exec(ctx, nil, &acc)
+	if err != nil {
+		return nil, err
+	}
+	return acc, nil
+}
