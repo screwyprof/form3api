@@ -85,7 +85,7 @@ tries to unmarshal it into an expected APIError structure and does nothing on fa
 now preserved for debugging/logging purposes.
 
 Now that the DeleteAccount method is implemented, I can update the previous tests to include a cleanup section, so that
-the tests accounts were removed automatically after the tests finish.
+the test accounts were removed automatically after the tests finish.
 
 ## A note on tests structure
 
