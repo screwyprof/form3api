@@ -3,7 +3,6 @@ package form3api_test
 import (
 	"bytes"
 	"context"
-	"errors"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -40,61 +39,47 @@ func TestRequestBuilder(t *testing.T) {
 		form3api.NotNil(t, err)
 	})
 
-	t.Run("transport error occurred, error returned", func(t *testing.T) {
+	t.Run("expected empty response body returned, no error returned", func(t *testing.T) {
 		t.Parallel()
 
 		// arrange
-		client := &httpClientMock{ExpectedError: errors.New("some error")}
+		req := &testRequest{SomeValue: 42}
+
+		client := &httpClientMock{
+			TB:                t,
+			ExpectedReqMethod: http.MethodGet,
+			ExpectedReqBody:   req,
+			StatusCode:        http.StatusNoContent,
+		}
 		rb := form3api.NewRequest().
 			WithClient(client).
-			WithBaseURL("/some_url")
+			WithBaseURL("/some_url").
+			WithMethod(http.MethodGet)
 
 		// act
-		err := rb.Exec(context.Background(), nil, nil)
+		err := rb.Exec(context.Background(), req, nil)
 
 		// assert
-		form3api.NotNil(t, err)
+		form3api.Ok(t, err)
 	})
 
-	t.Run("known API error occurred, error returned", func(t *testing.T) {
+	t.Run("API error occurred, error returned", func(t *testing.T) {
 		t.Parallel()
 
 		// arrange
 		want := &form3api.APIError{
-			StatusCode: http.StatusInternalServerError,
-			Code:       "SOME_ERROR",
-			Msg:        "some error",
+			Response: &http.Response{StatusCode: http.StatusInternalServerError},
+			Code:     "SOME_ERROR",
+			Msg:      "some error",
 		}
 
 		client := &httpClientMock{
 			TB:                t,
 			ExpectedReqMethod: http.MethodGet,
-			StatusCode:        want.StatusCode,
+			StatusCode:        http.StatusInternalServerError,
 			ResponseBody:      want,
 		}
-		rb := form3api.NewRequest().
-			WithClient(client).
-			WithBaseURL("/some_url")
 
-		// act
-		err := rb.Exec(context.Background(), nil, nil)
-
-		// assert
-		form3api.NotNil(t, err)
-	})
-
-	t.Run("unknown API error occurred, error returned", func(t *testing.T) {
-		t.Parallel()
-
-		// arrange
-		client := &httpClientMock{}
-		client.HandlerFunc = func(req *http.Request) (*http.Response, error) {
-			resp := &http.Response{
-				StatusCode: http.StatusInternalServerError,
-				Body:       ioutil.NopCloser(bytes.NewReader([]byte("invalid json body"))),
-			}
-			return resp, nil
-		}
 		rb := form3api.NewRequest().
 			WithClient(client).
 			WithBaseURL("/some_url")

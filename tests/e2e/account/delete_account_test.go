@@ -9,22 +9,17 @@ import (
 	"github.com/screwyprof/form3api"
 )
 
-func TestFetchAccount(t *testing.T) {
+func TestDeleteAccount(t *testing.T) {
 	// arrange
 	want := createTestAccount(t, generateCreateAccountRequest())
-	r := form3api.FetchAccount{
+
+	r := form3api.DeleteAccount{
 		AccountID: want.AccountData.ID,
 	}
 
-	// annihilate
-	t.Cleanup(func() {
-		deleteTestAccount(t, want.AccountData.ID)
-	})
-
 	// act
-	acc, err := client.FetchAccount(context.Background(), r)
+	err := client.DeleteAccount(context.Background(), r)
 
 	// assert
 	form3api.Ok(t, err)
-	form3api.Equals(t, want, acc)
 }

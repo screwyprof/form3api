@@ -61,6 +61,11 @@ func TestCreateAccount(t *testing.T) {
 		},
 	}
 
+	// annihilate
+	t.Cleanup(func() {
+		deleteTestAccount(t, ID)
+	})
+
 	// act
 	acc, err := client.CreateAccount(context.Background(), r)
 

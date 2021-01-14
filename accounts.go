@@ -12,6 +12,12 @@ type FetchAccount struct {
 	AccountID string
 }
 
+// DeleteAccount a request used to delete an account.
+type DeleteAccount struct {
+	AccountID string
+	Version   uint64
+}
+
 // Account a response to account resource.
 type Account struct {
 	AccountData AccountData `json:"data"`

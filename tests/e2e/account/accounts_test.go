@@ -3,8 +3,11 @@
 package account_test
 
 import (
+	"context"
 	"os"
 	"testing"
+
+	"github.com/brianvoe/gofakeit/v6"
 
 	"github.com/screwyprof/form3api"
 )
@@ -48,4 +51,41 @@ func assertIBAN(tb testing.TB, IBAN string) {
 func assertCustomer(tb testing.TB, customer string) {
 	tb.Helper()
 	form3api.True(tb, customer != "")
+}
+
+func createTestAccount(tb testing.TB, r form3api.CreateAccount) *form3api.Account {
+	tb.Helper()
+	acc, err := client.CreateAccount(context.Background(), r)
+	form3api.Ok(tb, err)
+	return acc
+}
+
+func generateCreateAccountRequest() form3api.CreateAccount {
+	r := form3api.CreateAccount{
+		AccountData: form3api.AccountData{
+			ID: gofakeit.UUID(),
+			OrganisationID: gofakeit.UUID(),
+			Type: "accounts",
+			Attributes: &form3api.AccountAttributes{
+				AccountNumber: gofakeit.Numerify("#########"),
+				BankID: gofakeit.Numerify("######"),
+				BankIDCode: "GBDSC",
+				Country: "GB",
+				Currency: "GBP",
+				CustomerID: "234",
+				IBAN: "GB28NWBK40030212764204",
+				BIC: "NWBKGB42",
+				ConfirmationOfPayee: &form3api.ConfirmationOfPayee{
+					AccountClassification: "Personal",
+				},
+			},
+		},
+	}
+	return r
+}
+
+func deleteTestAccount(tb testing.TB, ID string) {
+	tb.Helper()
+	err := client.DeleteAccount(context.Background(), form3api.DeleteAccount{AccountID: ID})
+	form3api.Ok(tb, err)
 }

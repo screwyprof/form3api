@@ -5,11 +5,12 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/brianvoe/gofakeit/v6"
 	"io/ioutil"
 	"net/http"
 	"reflect"
 	"testing"
+
+	"github.com/brianvoe/gofakeit/v6"
 
 	"github.com/screwyprof/form3api"
 )
@@ -163,27 +164,6 @@ func TestClientFetchAccount(t *testing.T) {
 	})
 }
 
-func assertRequestMethod(tb testing.TB, want string, r *http.Request) {
-	tb.Helper()
-	form3api.Equals(tb, want, r.Method)
-}
-
-func assertRequestBody(tb testing.TB, want interface{}, r *http.Request) {
-	tb.Helper()
-	if want == nil {
-		return
-	}
-	wantType := reflect.TypeOf(want)
-
-	got := reflect.New(wantType).Interface()
-	form3api.Ok(tb, json.NewDecoder(r.Body).Decode(&got))
-
-	wantPtr := reflect.New(wantType)
-	wantPtr.Elem().Set(reflect.ValueOf(want))
-
-	form3api.Equals(tb, wantPtr.Interface(), got)
-}
-
 type httpClientMock struct {
 	TB testing.TB
 
@@ -216,6 +196,27 @@ func (c *httpClientMock) defaultHandler(req *http.Request) (*http.Response, erro
 		StatusCode: c.StatusCode,
 		Body:       ioutil.NopCloser(bytes.NewReader(toJSONBytes(c.TB, c.ResponseBody))),
 	}, nil
+}
+
+func assertRequestMethod(tb testing.TB, want string, r *http.Request) {
+	tb.Helper()
+	form3api.Equals(tb, want, r.Method)
+}
+
+func assertRequestBody(tb testing.TB, want interface{}, r *http.Request) {
+	tb.Helper()
+	if want == nil {
+		return
+	}
+	wantType := reflect.TypeOf(want)
+
+	got := reflect.New(wantType).Interface()
+	form3api.Ok(tb, json.NewDecoder(r.Body).Decode(&got))
+
+	wantPtr := reflect.New(wantType)
+	wantPtr.Elem().Set(reflect.ValueOf(want))
+
+	form3api.Equals(tb, wantPtr.Interface(), got)
 }
 
 func toJSONBytes(tb testing.TB, object interface{}) []byte {
