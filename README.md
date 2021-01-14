@@ -7,7 +7,7 @@ Form3 Take Home Exercise
 
 ## Introduction
 
-This is a possible solution to [Form3 Take Home Exercise](https://github.com/form3tech-oss/interview-accountapi) done by 
+This is a solution to [Form3 Take Home Exercise](https://github.com/form3tech-oss/interview-accountapi) done by 
 [Maksim Shcherbo](https://www.linkedin.com/in/maxim-shcherbo-3204582b/) aka [*screwyprof*](https://github.com/screwyprof).
 
 ## Usage
