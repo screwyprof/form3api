@@ -2,7 +2,7 @@ OK_COLOR=\033[32;01m
 NO_COLOR=\033[0m
 MAKE_COLOR=\033[33;01m%-20s\033[0m
 
-all: deps tools lint test ## install deps, lint and test
+all: tools lint test ## install tools, lint and test
 
 deps: ## install dependencies
 	@echo "$(OK_COLOR)--> Download go.mod dependencies$(NO_COLOR)"
@@ -30,6 +30,10 @@ test-e2e: ## run e2e tests
 test-coverage: ## run all tests with coverage
 	@echo "$(OK_COLOR)--> Generating code coverage$(NO_COLOR)"
 	tools/coverage.sh
+
+test-docker: ## run tests in docker
+	@echo "$(OK_COLOR)--> Running tests in Docker$(NO_COLOR)"
+	docker-compose up --build --abort-on-container-exit
 
 fmt: ## format go files
 	@echo "$(OK_COLOR)--> Formatting go files$(NO_COLOR)"

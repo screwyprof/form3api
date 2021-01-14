@@ -1,6 +1,15 @@
 version: '3'
 
 services:
+  tests:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    depends_on:
+      - accountapi
+    environment:
+      - TEST_BASE_URL=http://accountapi:8080/v1
+
   accountapi:
     image: form3tech/interview-accountapi:v1.0.0-4-g63cf8434
     restart: on-failure
