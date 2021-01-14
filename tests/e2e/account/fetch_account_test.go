@@ -12,10 +12,14 @@ import (
 func TestFetchAccount(t *testing.T) {
 	// arrange
 	want := createTestAccount(t, generateCreateAccountRequest())
-
 	r := form3api.FetchAccount{
 		AccountID: want.AccountData.ID,
 	}
+
+	// annihilate
+	t.Cleanup(func() {
+		deleteTestAccount(t, want.AccountData.ID)
+	})
 
 	// act
 	acc, err := client.FetchAccount(context.Background(), r)
@@ -23,9 +27,4 @@ func TestFetchAccount(t *testing.T) {
 	// assert
 	form3api.Ok(t, err)
 	form3api.Equals(t, want, acc)
-
-	// annihilate
-	t.Cleanup(func() {
-		deleteTestAccount(t, want.AccountData.ID)
-	})
 }

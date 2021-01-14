@@ -75,3 +75,24 @@ very many ways to do it. One of the possible options would be to check the respo
 This step is pretty straightforward. I'm following the same [A-TDD cycle](https://www.agilealliance.org/glossary/atdd/)
 to drive the development. I updated Readme to include usage section. I also added an example application to demonstrate
 some basic client features.
+
+## Delete Account
+[Github Issue](https://github.com/screwyprof/form3api/issues/12)
+
+I expected this step to be trivial, however I had to take care of a few things. The major thing is error handling.
+The API responses can be tricky. Sometimes they are not consistent with the schema. Now, when an error occurs the client 
+tries to unmarshal it into an expected APIError structure and does nothing on failure. In any case the response body is
+now preserved for debugging/logging purposes.
+
+Now that the DeleteAccount method is implemented, I can update the previous tests to include a cleanup section, so that
+the tests accounts were removed automatically after the tests finish.
+
+## A note on tests structure
+
+I'm following the AAA (Arrange, Act, Assert) pattern to structure the tests. Some tests may
+also need a cleanup, in that case I use Annihilate section. Usually I start writing tests from bottom to top: first
+I implement the Assert section when I think on what I should check, then goes the Act section, where the SUT is run.
+Finally, I set up the SUT in the Arrange section.
+
+In case the test needs to run some clean-up, I add the Annihilate section after Arrange to make sure the cleanup
+function runs even when the test asserts fail and stop the test execution flow.
