@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// APIError represent response API error.
+// APIError represents an API error response.
 type APIError struct {
 	Response *http.Response `json:"-"`
 	Code     string         `json:"code"`

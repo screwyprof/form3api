@@ -24,7 +24,7 @@ c := form3api.NewClient(nil, "http://localhost:8080/v1")
 accountID := "51646a03-a52e-4e51-b405-cf2b8078c1a8"
 acc, err := c.FetchAccount(context.Background(), form3api.FetchAccount{AccountID: accountID})
 ```
-Take a loot at [Client Demo](example/client_demo.go) for more details.
+Take a look at [Client Demo](example/client_demo.go) for more details.
 
 ## Running integration tests
 To run tests in docker use `make test-docker`, or its equivalent `docker-compose up --build --abort-on-container-exit`

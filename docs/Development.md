@@ -90,7 +90,10 @@ the test accounts were removed automatically after the tests finish.
 ## List Accounts
 [Github Issue](https://github.com/screwyprof/form3api/issues/16)
 
-No surprises here. Given that I don't need to implement the filters, only HATEOS paging is the main focus here.
+Given that I don't need to implement the filters, only HATEOS paging is the main focus here.
+
+I've updated the docs to make them more `godoc` friendly.
+I moved `asserts.go` into a separate package to de-clutter package API and the docs.
 
 ## A note on tests structure
 
