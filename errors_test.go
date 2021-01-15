@@ -10,6 +10,8 @@ import (
 )
 
 func TestAPIError_Error(t *testing.T) {
+	t.Parallel()
+
 	// arrange
 	want := "API Call Error: GET https://example.org/path?foo=bar: 404 Page not found PAGE_NOT_FOUND"
 

@@ -17,12 +17,15 @@ import (
 )
 
 func TestNewClient(t *testing.T) {
+	t.Parallel()
 	c := form3api.NewClient(nil, "")
 	assert.NotNil(t, c)
 }
 
 func TestClientCreateAccount(t *testing.T) {
 	t.Run("valid request given, account created", func(t *testing.T) {
+		t.Parallel()
+
 		// arrange
 		ID := gofakeit.UUID()
 		organisationID := gofakeit.UUID()
@@ -90,6 +93,8 @@ func TestClientCreateAccount(t *testing.T) {
 	})
 
 	t.Run("an error occurred, error returned", func(t *testing.T) {
+		t.Parallel()
+
 		// arrange
 		client := &httpClientMock{ExpectedError: errors.New("some error")}
 		c := form3api.NewClient(client, "")
@@ -104,6 +109,8 @@ func TestClientCreateAccount(t *testing.T) {
 
 func TestClientFetchAccount(t *testing.T) {
 	t.Run("valid request given, account created", func(t *testing.T) {
+		t.Parallel()
+
 		// arrange
 		ID := gofakeit.UUID()
 		want := generateTestAccount(ID)
@@ -129,6 +136,8 @@ func TestClientFetchAccount(t *testing.T) {
 	})
 
 	t.Run("an error occurred, error returned", func(t *testing.T) {
+		t.Parallel()
+
 		// arrange
 		client := &httpClientMock{ExpectedError: errors.New("some error")}
 		c := form3api.NewClient(client, "")
@@ -143,6 +152,8 @@ func TestClientFetchAccount(t *testing.T) {
 
 func TestClientDeleteAccount(t *testing.T) {
 	t.Run("valid request given, account created", func(t *testing.T) {
+		t.Parallel()
+
 		// arrange
 		r := form3api.DeleteAccount{
 			AccountID: gofakeit.UUID(),
@@ -163,6 +174,8 @@ func TestClientDeleteAccount(t *testing.T) {
 	})
 
 	t.Run("an error occurred, error returned", func(t *testing.T) {
+		t.Parallel()
+
 		// arrange
 		client := &httpClientMock{ExpectedError: errors.New("some error")}
 		c := form3api.NewClient(client, "")
@@ -177,6 +190,8 @@ func TestClientDeleteAccount(t *testing.T) {
 
 func TestClientListAccounts(t *testing.T) {
 	t.Run("valid request given, account created", func(t *testing.T) {
+		t.Parallel()
+
 		// arrange
 		want := &form3api.Accounts{
 			AccountData: []form3api.AccountData{
@@ -213,6 +228,8 @@ func TestClientListAccounts(t *testing.T) {
 	})
 
 	t.Run("an error occurred, error returned", func(t *testing.T) {
+		t.Parallel()
+
 		// arrange
 		client := &httpClientMock{ExpectedError: errors.New("some error")}
 		c := form3api.NewClient(client, "")
