@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/screwyprof/form3api"
+	"github.com/screwyprof/form3api/assert"
 )
 
 func TestRequestBuilder(t *testing.T) {
@@ -22,7 +23,7 @@ func TestRequestBuilder(t *testing.T) {
 		err := rb.Exec(context.Background(), params, nil)
 
 		// assert
-		form3api.NotNil(t, err)
+		assert.NotNil(t, err)
 	})
 
 	t.Run("invalid request url given, error returned", func(t *testing.T) {
@@ -36,7 +37,7 @@ func TestRequestBuilder(t *testing.T) {
 		err := rb.Exec(context.Background(), nil, nil)
 
 		// assert
-		form3api.NotNil(t, err)
+		assert.NotNil(t, err)
 	})
 
 	t.Run("expected empty response body returned, no error returned", func(t *testing.T) {
@@ -60,7 +61,7 @@ func TestRequestBuilder(t *testing.T) {
 		err := rb.Exec(context.Background(), req, nil)
 
 		// assert
-		form3api.Ok(t, err)
+		assert.Ok(t, err)
 	})
 
 	t.Run("API error occurred, error returned", func(t *testing.T) {
@@ -88,7 +89,7 @@ func TestRequestBuilder(t *testing.T) {
 		err := rb.Exec(context.Background(), nil, nil)
 
 		// assert
-		form3api.NotNil(t, err)
+		assert.NotNil(t, err)
 	})
 
 	t.Run("body deserialization error occurred, error returned", func(t *testing.T) {
@@ -112,7 +113,7 @@ func TestRequestBuilder(t *testing.T) {
 		err := rb.Exec(context.Background(), nil, nil)
 
 		// assert
-		form3api.NotNil(t, err)
+		assert.NotNil(t, err)
 	})
 
 	t.Run("valid request, valid response", func(t *testing.T) {
@@ -139,8 +140,8 @@ func TestRequestBuilder(t *testing.T) {
 		err := rb.Exec(context.Background(), req, &got)
 
 		// assert
-		form3api.Ok(t, err)
-		form3api.Equals(t, want, got)
+		assert.Ok(t, err)
+		assert.Equals(t, want, got)
 	})
 }
 

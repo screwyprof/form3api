@@ -6,14 +6,17 @@ import (
 	"testing"
 
 	"github.com/screwyprof/form3api"
+	"github.com/screwyprof/form3api/assert"
 )
 
 func TestAPIError_Error(t *testing.T) {
+	t.Parallel()
+
 	// arrange
 	want := "API Call Error: GET https://example.org/path?foo=bar: 404 Page not found PAGE_NOT_FOUND"
 
 	baseURL, err := url.Parse("https://example.org/path?foo=bar")
-	form3api.Ok(t, err)
+	assert.Ok(t, err)
 
 	apiErr := &form3api.APIError{
 		Response: &http.Response{
@@ -31,5 +34,5 @@ func TestAPIError_Error(t *testing.T) {
 	got := apiErr.Error()
 
 	// assert
-	form3api.Equals(t, want, got)
+	assert.Equals(t, want, got)
 }

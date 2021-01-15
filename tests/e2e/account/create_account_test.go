@@ -9,6 +9,7 @@ import (
 	"github.com/brianvoe/gofakeit/v6"
 
 	"github.com/screwyprof/form3api"
+	"github.com/screwyprof/form3api/assert"
 )
 
 func TestCreateAccount(t *testing.T) {
@@ -70,6 +71,6 @@ func TestCreateAccount(t *testing.T) {
 	acc, err := client.CreateAccount(context.Background(), r)
 
 	// assert
-	form3api.Ok(t, err)
+	assert.Ok(t, err)
 	assertAccountCreated(t, want, acc)
 }

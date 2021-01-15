@@ -10,6 +10,7 @@ import (
 	"github.com/brianvoe/gofakeit/v6"
 
 	"github.com/screwyprof/form3api"
+	"github.com/screwyprof/form3api/assert"
 )
 
 const defaultTestBaseURL = "http://localhost:8080/v1"
@@ -38,26 +39,35 @@ func assertAccountCreated(tb testing.TB, want, got *form3api.Account) {
 	got.AccountData.ModifiedOn = nil
 	got.AccountData.Attributes.CustomerID = ""
 	got.AccountData.Attributes.IBAN = ""
-	form3api.Equals(tb, want, got)
+	assert.Equals(tb, want, got)
 }
 
 // TODO: should check against the pattern
 func assertIBAN(tb testing.TB, IBAN string) {
 	tb.Helper()
-	form3api.True(tb, IBAN != "")
+	assert.True(tb, IBAN != "")
 }
 
 // TODO: should check against the pattern
 func assertCustomer(tb testing.TB, customer string) {
 	tb.Helper()
-	form3api.True(tb, customer != "")
+	assert.True(tb, customer != "")
 }
 
 func createTestAccount(tb testing.TB, r form3api.CreateAccount) *form3api.Account {
 	tb.Helper()
 	acc, err := client.CreateAccount(context.Background(), r)
-	form3api.Ok(tb, err)
+	assert.Ok(tb, err)
 	return acc
+}
+
+func createTestAccounts(tb testing.TB, number int) []*form3api.Account {
+	var res []*form3api.Account
+	for i := 0; i < number; i++ {
+		acc := createTestAccount(tb, generateCreateAccountRequest())
+		res = append(res, acc)
+	}
+	return res
 }
 
 func generateCreateAccountRequest() form3api.CreateAccount {
@@ -87,5 +97,5 @@ func generateCreateAccountRequest() form3api.CreateAccount {
 func deleteTestAccount(tb testing.TB, ID string) {
 	tb.Helper()
 	err := client.DeleteAccount(context.Background(), form3api.DeleteAccount{AccountID: ID})
-	form3api.Ok(tb, err)
+	assert.Ok(tb, err)
 }
