@@ -60,6 +60,15 @@ func createTestAccount(tb testing.TB, r form3api.CreateAccount) *form3api.Accoun
 	return acc
 }
 
+func createTestAccounts(tb testing.TB, number int) []*form3api.Account {
+	var res []*form3api.Account
+	for i := 0; i < number; i++ {
+		acc := createTestAccount(tb, generateCreateAccountRequest())
+		res = append(res, acc)
+	}
+	return res
+}
+
 func generateCreateAccountRequest() form3api.CreateAccount {
 	r := form3api.CreateAccount{
 		AccountData: form3api.AccountData{

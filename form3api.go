@@ -2,6 +2,7 @@ package form3api
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strconv"
 )
@@ -67,4 +68,30 @@ func (c *Client) DeleteAccount(ctx context.Context, r DeleteAccount) error {
 		WithBaseURL(c.baseURL+"/organisation/accounts/"+r.AccountID+"?version="+strconv.Itoa(int(r.Version))).
 		Exec(ctx, nil, nil)
 	return err
+}
+
+// CreateAccount creates an account.
+//
+// Form 3 API docs: https://api-docs.form3.tech/api.html?shell#organisation-accounts-list
+func (c *Client) ListAccounts(ctx context.Context, r ListAccounts) (*Accounts, error) {
+	const defaultPageSize = 100
+	if r.Page.Size == 0 {
+		r.Page.Size = defaultPageSize
+	}
+
+	url := fmt.Sprintf("%s/organisation/accounts?page[number]=%d&page[size]=%d",
+		c.baseURL, r.Page.Number, r.Page.Size)
+
+	res := &Accounts{
+		AccountData: make([]AccountData, r.Page.Size),
+	}
+
+	err := NewRequest().
+		WithClient(c.client).
+		WithBaseURL(url).
+		Exec(ctx, nil, &res)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }

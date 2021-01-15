@@ -18,10 +18,27 @@ type DeleteAccount struct {
 	Version   uint64
 }
 
+// ListAccounts a request used to get a list of accounts.
+type ListAccounts struct {
+	Page Page
+}
+
+// Page contains optional page parameters.
+type Page struct {
+	Number uint64
+	Size   uint64
+}
+
 // Account a response to account resource.
 type Account struct {
 	AccountData AccountData `json:"data"`
 	Links       Links       `json:"links"`
+}
+
+// Account a response to list accounts resource.
+type Accounts struct {
+	AccountData []AccountData `json:"data"`
+	Links       Links         `json:"links"`
 }
 
 // AccountData the resource data that is the subject of the API call.
@@ -37,7 +54,11 @@ type AccountData struct {
 
 // Links HATEOAS section of the API response.
 type Links struct {
-	Self string `json:"self"`
+	Self  string `json:"self"`
+	First string `json:"first,omitempty"`
+	Last  string `json:"last,omitempty"`
+	Prev  string `json:"prev,omitempty"`
+	Next  string `json:"next,omitempty"`
 }
 
 // AccountAttributes attributes for account resource.
