@@ -87,6 +87,11 @@ now preserved for debugging/logging purposes.
 Now that the DeleteAccount method is implemented, I can update the previous tests to include a cleanup section, so that
 the test accounts were removed automatically after the tests finish.
 
+## List Accounts
+[Github Issue](https://github.com/screwyprof/form3api/issues/16)
+
+No surprises here. Given that I don't need to implement the filters, only HATEOS paging is the main focus here.
+
 ## A note on tests structure
 
 I'm following the AAA (Arrange, Act, Assert) pattern to structure the tests. Some tests may
