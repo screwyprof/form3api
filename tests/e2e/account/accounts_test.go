@@ -18,6 +18,8 @@ const defaultTestBaseURL = "http://localhost:8080/v1"
 var client *form3api.Client
 
 func init() {
+	gofakeit.Seed(0)
+
 	baseURL := os.Getenv("TEST_BASE_URL")
 	if baseURL == "" {
 		baseURL = defaultTestBaseURL
