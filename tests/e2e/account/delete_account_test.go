@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/screwyprof/form3api"
+	"github.com/screwyprof/form3api/assert"
 )
 
 func TestDeleteAccount(t *testing.T) {
@@ -21,5 +22,5 @@ func TestDeleteAccount(t *testing.T) {
 	err := client.DeleteAccount(context.Background(), r)
 
 	// assert
-	form3api.Ok(t, err)
+	assert.Ok(t, err)
 }

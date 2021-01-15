@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/screwyprof/form3api"
+	"github.com/screwyprof/form3api/assert"
 )
 
 func TestListAccounts(t *testing.T) {
@@ -41,6 +42,6 @@ func TestListAccounts(t *testing.T) {
 	got, err := client.ListAccounts(context.Background(), r)
 
 	// assert
-	form3api.Ok(t, err)
-	form3api.Equals(t, want, got)
+	assert.Ok(t, err)
+	assert.Equals(t, want, got)
 }

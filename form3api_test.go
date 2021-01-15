@@ -13,11 +13,12 @@ import (
 	"github.com/brianvoe/gofakeit/v6"
 
 	"github.com/screwyprof/form3api"
+	"github.com/screwyprof/form3api/assert"
 )
 
 func TestNewClient(t *testing.T) {
 	c := form3api.NewClient(nil, "")
-	form3api.NotNil(t, c)
+	assert.NotNil(t, c)
 }
 
 func TestClientCreateAccount(t *testing.T) {
@@ -84,8 +85,8 @@ func TestClientCreateAccount(t *testing.T) {
 		got, err := c.CreateAccount(context.Background(), r)
 
 		// assert
-		form3api.Ok(t, err)
-		form3api.Equals(t, want, got)
+		assert.Ok(t, err)
+		assert.Equals(t, want, got)
 	})
 
 	t.Run("an error occurred, error returned", func(t *testing.T) {
@@ -97,7 +98,7 @@ func TestClientCreateAccount(t *testing.T) {
 		_, err := c.CreateAccount(context.Background(), form3api.CreateAccount{})
 
 		// assert
-		form3api.NotNil(t, err)
+		assert.NotNil(t, err)
 	})
 }
 
@@ -123,8 +124,8 @@ func TestClientFetchAccount(t *testing.T) {
 		got, err := c.FetchAccount(context.Background(), r)
 
 		// assert
-		form3api.Ok(t, err)
-		form3api.Equals(t, want, got)
+		assert.Ok(t, err)
+		assert.Equals(t, want, got)
 	})
 
 	t.Run("an error occurred, error returned", func(t *testing.T) {
@@ -136,7 +137,7 @@ func TestClientFetchAccount(t *testing.T) {
 		_, err := c.FetchAccount(context.Background(), form3api.FetchAccount{})
 
 		// assert
-		form3api.NotNil(t, err)
+		assert.NotNil(t, err)
 	})
 }
 
@@ -158,7 +159,7 @@ func TestClientDeleteAccount(t *testing.T) {
 		err := c.DeleteAccount(context.Background(), r)
 
 		// assert
-		form3api.Ok(t, err)
+		assert.Ok(t, err)
 	})
 
 	t.Run("an error occurred, error returned", func(t *testing.T) {
@@ -170,7 +171,7 @@ func TestClientDeleteAccount(t *testing.T) {
 		err := c.DeleteAccount(context.Background(), form3api.DeleteAccount{})
 
 		// assert
-		form3api.NotNil(t, err)
+		assert.NotNil(t, err)
 	})
 }
 
@@ -207,8 +208,8 @@ func TestClientListAccounts(t *testing.T) {
 		got, err := c.ListAccounts(context.Background(), r)
 
 		// assert
-		form3api.Ok(t, err)
-		form3api.Equals(t, want, got)
+		assert.Ok(t, err)
+		assert.Equals(t, want, got)
 	})
 
 	t.Run("an error occurred, error returned", func(t *testing.T) {
@@ -220,7 +221,7 @@ func TestClientListAccounts(t *testing.T) {
 		_, err := c.ListAccounts(context.Background(), form3api.ListAccounts{})
 
 		// assert
-		form3api.NotNil(t, err)
+		assert.NotNil(t, err)
 	})
 }
 
@@ -284,7 +285,7 @@ func (c *httpClientMock) defaultHandler(req *http.Request) (*http.Response, erro
 
 func assertRequestMethod(tb testing.TB, want string, r *http.Request) {
 	tb.Helper()
-	form3api.Equals(tb, want, r.Method)
+	assert.Equals(tb, want, r.Method)
 }
 
 func assertRequestBody(tb testing.TB, want interface{}, r *http.Request) {
@@ -295,17 +296,17 @@ func assertRequestBody(tb testing.TB, want interface{}, r *http.Request) {
 	wantType := reflect.TypeOf(want)
 
 	got := reflect.New(wantType).Interface()
-	form3api.Ok(tb, json.NewDecoder(r.Body).Decode(&got))
+	assert.Ok(tb, json.NewDecoder(r.Body).Decode(&got))
 
 	wantPtr := reflect.New(wantType)
 	wantPtr.Elem().Set(reflect.ValueOf(want))
 
-	form3api.Equals(tb, wantPtr.Interface(), got)
+	assert.Equals(tb, wantPtr.Interface(), got)
 }
 
 func toJSONBytes(tb testing.TB, object interface{}) []byte {
 	tb.Helper()
 	jsonBytes, err := json.Marshal(object)
-	form3api.Ok(tb, err)
+	assert.Ok(tb, err)
 	return jsonBytes
 }
