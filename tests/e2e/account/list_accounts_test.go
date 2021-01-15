@@ -45,3 +45,39 @@ func TestListAccounts(t *testing.T) {
 	assert.Ok(t, err)
 	assert.Equals(t, want, got)
 }
+
+func TestListAllAccounts(t *testing.T) {
+	// arrange
+	accounts := createTestAccounts(t, 5)
+
+	// annihilate
+	t.Cleanup(func() {
+		for i := range accounts {
+			deleteTestAccount(t, accounts[i].AccountData.ID)
+		}
+	})
+
+	r := form3api.ListAccounts{
+		Page: form3api.Page{Size: 2},
+	}
+
+	// act
+	var result []form3api.AccountData
+	for {
+		res, err := client.ListAccounts(context.Background(), r)
+		assert.Ok(t, err)
+
+		result = append(result, res.AccountData...)
+		if res.Links.Next == "" {
+			break
+		}
+
+		num, err := res.Links.NextPageNum()
+		assert.Ok(t, err)
+
+		r.Page.Number = num
+	}
+
+	// assert
+	assert.Equals(t, len(accounts), len(result))
+}
