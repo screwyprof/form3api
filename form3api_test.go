@@ -140,6 +140,40 @@ func TestClientFetchAccount(t *testing.T) {
 	})
 }
 
+func TestClientDeleteAccount(t *testing.T) {
+	t.Run("valid request given, account created", func(t *testing.T) {
+		// arrange
+		r := form3api.DeleteAccount{
+			AccountID: gofakeit.UUID(),
+		}
+
+		client := &httpClientMock{
+			TB:                t,
+			ExpectedReqMethod: http.MethodDelete,
+			StatusCode:        http.StatusNoContent,
+		}
+
+		// act
+		c := form3api.NewClient(client, "")
+		err := c.DeleteAccount(context.Background(), r)
+
+		// assert
+		form3api.Ok(t, err)
+	})
+
+	t.Run("an error occurred, error returned", func(t *testing.T) {
+		// arrange
+		client := &httpClientMock{ExpectedError: errors.New("some error")}
+		c := form3api.NewClient(client, "")
+
+		// act
+		err := c.DeleteAccount(context.Background(), form3api.DeleteAccount{})
+
+		// assert
+		form3api.NotNil(t, err)
+	})
+}
+
 func TestClientListAccounts(t *testing.T) {
 	t.Run("valid request given, account created", func(t *testing.T) {
 		// arrange
